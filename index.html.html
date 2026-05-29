@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather</title>
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Cherry+Bomb+One&family=Contrail+One&family=Gugi&family=Jua&family=Major+Mono+Display&family=Nanum+Gothic&family=Noto+Sans+KR:wght@100..900&family=Orbit&display=swap" rel="stylesheet">
+    <style>
+        .one{
+            transform: scale(1.5);
+            display: flex;
+            margin: 200px auto;
+            display: flex;
+            align-items: center;
+            /* gap: 30px; */
+            justify-content: center;
+            /* border: 1px solid red; */
+        }
+        .wrap{
+            width: 700px;
+            height: 450px;
+            background-color: rgb(43, 69, 90);
+            /* margin: 100px auto; */
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            border-radius: 20px 0 0 20px;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .circle{
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-color: rgb(255, 174, 24);
+            z-index: 0;
+            animation: move 5s infinite linear;
+        }
+       
+        .mainBox{
+            width: 60%;
+            height: 100%;
+            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+             z-index: 1;
+            /* border: 1px solid red; */
+        }
+        #con{
+            width: 200px;
+            height: 200px;
+            z-index: 1;
+            margin-bottom: 20px;
+        }
+        .city{
+            grid-template-columns: 5, 1fr;
+            height: 100%;
+            width: 30%;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+            z-index: 1;
+        }
+        .text{
+            font-family: "Contrail One", sans-serif;
+            width: 70%;
+            padding: 15px;
+            transform: scale(1.4);
+            border-radius: 20px;
+            color: rgb(28, 77, 133);
+            text-align: left;
+            background-color: rgb(165, 204, 206);
+            z-index: 1;
+        }
+        .bt{
+            z-index: 1;
+            font-family: "Contrail One", sans-serif;
+            width: 95%;
+            background-color: rgb(224, 93, 75);
+            height: 20%;
+            border-radius: 20px;
+            grid-template-rows: 5, 1fr;
+            /* border: 1px solid red; */
+            font-size: 20px;
+            font-weight: bold;
+            color: rgb(47, 76, 121);
+            transition: all 0.3s;
+            box-shadow: 0 3px 5px rgb(47, 56, 63);
+        }
+        .bt:hover{
+            background-color: rgb(248, 79, 67);
+            color: aliceblue;
+        }
+        .vew{
+            width: 400px;
+            height: 450px;
+            overflow: hidden;
+            border-radius: 0 20px 20px 0;
+        }
+       .slider{
+            transition: all 0.3s;
+            display: flex;
+            /* 사진 하나 당 800픽셀 /첫 번째 사진은 0px/ 두 번째 사진은 -800px/ 세 번째 사진은 -1600px */
+            /* transform: translateX(-1600px); */
+        }
+        .slide{
+            width: 400px;
+            height: 450px;
+           
+            /* 밑에건 크기고정 하는 명령어 flex shrink */
+            flex-shrink: 0; 
+        }
+        .slide img{
+            width: 100%;
+            height: 100%;
+            
+            /* 오브젝트 핏 커버는 잘라내는 것 w/h필수/ 이미지한테 주는 것 */
+            object-fit: cover;
+        }
+       .btt{
+        width:20px;
+        height: 20px;
+        /* background-color: rgba(241, 241, 241, 0.8);border-radius: 50%;border: 1px solid rgb(223, 223, 223); */
+        font-size:60px;font-weight: 300;color: rgba(249, 253, 255, 0.8);
+        position: relative;top: 50%;
+       }
+       .blt{
+        position: absolute;
+        display: flex;
+        gap: 10px;
+       }
+       .prev{right: -200px;}
+       .next{left: 500px;}
+        
+       @keyframes move{
+        0%{
+            left: 0;
+            transform: scale(0);
+        }
+        100%{
+            left: 50px;
+            transform: scale(3);
+        }
+       }
+
+    </style>
+</head>
+<body>
+    <div class="one">
+    
+        <div class="wrap">
+        
+        <div class="city">
+            <button class="bt" onclick="weatherToday('Ansan')">Ansan</button>
+            <button class="bt" onclick="weatherToday('Helsinki')">Helsinki</button>
+            <button class="bt" onclick="weatherToday('Tokyo')">Tokyo</button>
+            <button class="bt"onclick="weatherToday('Rome')">Rome</button>
+            <button class="bt" onclick="weatherToday('Moscow')">Moscow</button>
+        </div>
+
+        <div class="mainBox">
+            
+            <img id="con" src="" alt="날씨 아이콘"/>
+            <div class="text">
+            <h2 class="name">도시이름:</h2>
+            <div id="dis">오늘의 온도:</div>
+            <div id="rain">이슬점:</div>
+            <div id="biento">풍속:</div>
+            </div>
+        </div>
+        <div class="circle"></div>
+    </div>
+    <div class="vew">
+            <div class="slider" id="slider"></div> 
+            </div>
+                <!-- 안에 내용은 js에서 만듦 -->
+                 <div class="blt">
+                <button class="btt prev" onclick="prevSlide()">&lt;</button>
+                <button class="btt next" onclick="nextSlide()">&gt;</button>
+                </div>  
+              
+        </div>
+    </div>
+<!-- <img src="./img/cloud1.jpg" alt=""> -->
+    <script>
+        let dis=document.querySelector("#dis")
+        let rain=document.querySelector("#rain")
+        let city=document.querySelector(".city")
+        let biento=document.querySelector("#biento")
+        let name=document.querySelector(".name")
+        let imgBox=document.querySelector(".imgBox")
+
+        const API_KEY='2c2497814fd3a5303b3b0fa5d70ff04e'
+
+        const cityname=["Ansan", "Helsinki", "Tokyo", "Rome", "Moscow"];
+
+        let con=document.querySelector("#con")
+
+          
+    
+        async function weatherToday(cityname){
+            let res=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${API_KEY}&units=metric&lang=kr`)
+            let data=await res.json()
+            dis.innerHTML="Temperature:"+data.main.temp+"℃"
+            rain.innerHTML="Dew Point:"+data.main.humidity+"%"
+            biento.innerHTML="Wind Speed:"+data.wind.speed 
+            let icon=data.weather[0].icon;
+
+            let iconUrl=`http://openweathermap.org/img/wn/${icon}@2x.png`
+            con.setAttribute('src', iconUrl)
+            name.innerHTML=cityname
+        }
+        weatherToday('Ansan')
+        
+       class BasicSlider{
+            constructor(imgs){
+                this.imgs=imgs
+                this.index=0
+                this.size=400
+                this.slider=document.querySelector("#slider")
+            }
+            // 아이템은 주소만 있는 녀석
+            makeSlide(){
+                let html=''
+                this.imgs.forEach(function(item){
+                    html+=`<div class="slide">
+                           <img src="${item}">
+                           </div>`
+                })
+                this.slider.innerHTML=html
+            }
+            move(){
+                this.slider.style.transform=`translateX(-${this.index*this.size}px)`
+            }
+                // 넥스트 버튼을 만듦 (다음)**
+            next(){
+                this.index++
+                if(this.index>=this.imgs.length){
+                    this.index=0
+                }
+                this.move()
+            }
+            
+            // 프리뷰 버튼을 만듦 (되돌아가기)
+            prev(){
+                 this.index--
+                if(this.index<0){
+                    this.index=this.imgs.length-1
+                }
+                this.move()
+            }
+        }
+        
+
+        let slideImg=[
+           "./img/cloud1.jpg",
+            "./img/cloud2.jpg",
+            "./img/cloud3.jpg",
+            "./img/cloud4.jpg",
+            "./img/cloud5.jpg",
+        ]
+
+        let mySlider=new BasicSlider(slideImg)
+
+        mySlider.makeSlide()
+
+        function prevSlide(){
+            mySlider.prev()
+        }
+
+        function nextSlide(){
+            mySlider.next()
+        }
+    </script>
+</body>
+</html>
